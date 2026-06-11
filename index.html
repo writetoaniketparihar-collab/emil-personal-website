@@ -138,62 +138,201 @@
   .sc-stat .l{font-family:var(--display);font-weight:500;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted)}
   .sc-stat.small .v{font-size:28px}
 
-  /* STORY TIMELINE / editorial horizontal row */
+  /* STORY TIMELINE / Cresta-style arrow-driven horizontal scroll */
   .story{padding:120px 0 130px;position:relative;background:var(--bg);overflow:hidden}
   .story::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(232,119,34,.04) 0%,transparent 70%);pointer-events:none}
 
-  .timeline-shell{position:relative;margin-top:56px}
+  /* Arrow nav, sits in the section header like Cresta */
+  .tl-nav{display:flex;gap:10px;align-items:center}
+  .tl-arrow{width:48px;height:48px;border-radius:50%;border:1px solid var(--line2);background:var(--card);color:var(--fg);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;-webkit-appearance:none;appearance:none;transition:border-color .25s,background .25s,opacity .25s,transform .15s}
+  .tl-arrow svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none}
+  .tl-arrow:hover{border-color:var(--orange);background:rgba(232,119,34,.08)}
+  .tl-arrow:active{transform:scale(.94)}
+  .tl-arrow[disabled]{opacity:.28;cursor:default;pointer-events:none}
 
-  .timeline-row{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:6px;padding:64px 0 0}
+  .timeline-shell{position:relative;margin-top:48px}
 
-  /* Race line — single sharpened spine */
-  .race-line{position:absolute;top:64px;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(0,160,138,.5) 4%,rgba(0,160,138,.9) 22%,rgba(232,119,34,.9) 78%,var(--orange) 96%,transparent 100%);z-index:1}
-  .race-line::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background-image:repeating-linear-gradient(90deg,transparent 0 22px,rgba(255,255,255,.16) 22px 24px);pointer-events:none}
-  .race-line::after{content:"";position:absolute;left:0;top:50%;width:7px;height:7px;border-radius:50%;background:var(--green2);transform:translate(-50%,-50%);box-shadow:0 0 10px rgba(0,160,138,.6)}
+  /* Native horizontal scroll viewport: no wheel hijack, no sticky, no drag JS */
+  .timeline-viewport{overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none;-ms-overflow-style:none}
+  .timeline-viewport::-webkit-scrollbar{display:none}
 
-  /* Milestone column */
-  .ms{position:relative;flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;padding-top:24px;text-align:center;transition:transform .2s cubic-bezier(.2,.7,.2,1)}
-  .ms:hover{transform:translateY(-2px)}
+  .timeline-track{position:relative;display:flex;align-items:center;gap:22px;padding:30px 8px;width:max-content}
 
-  /* Dot sits ON the race line */
-  .ms-dot{position:absolute;top:-40px;left:50%;width:9px;height:9px;border-radius:50%;transform:translate(-50%,-50%);z-index:3;border:2px solid var(--bg)}
-  .ms.green-accent .ms-dot{background:var(--green2);box-shadow:0 0 0 3px rgba(0,160,138,.12)}
-  .ms.orange-accent .ms-dot{background:var(--orange);box-shadow:0 0 0 3px rgba(232,119,34,.12)}
+  /* Timing rail, runs through the vertical middle and threads every card */
+  .race-line{position:absolute;top:50%;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent 0%,rgba(0,160,138,.45) 3%,rgba(0,160,138,.85) 16%,rgba(232,119,34,.85) 84%,var(--orange) 97%,transparent 100%);z-index:1}
+  .race-line::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background-image:repeating-linear-gradient(90deg,transparent 0 22px,rgba(255,255,255,.14) 22px 24px);pointer-events:none}
 
-  /* Thin tick connecting line to content */
-  .ms-tick{position:absolute;top:-32px;left:50%;width:1px;height:18px;transform:translateX(-50%);z-index:2;opacity:.5}
-  .ms.green-accent .ms-tick{background:linear-gradient(180deg,var(--green2) 0%,transparent 100%)}
-  .ms.orange-accent .ms-tick{background:linear-gradient(180deg,var(--orange) 0%,transparent 100%)}
+  /* Milestone card, threaded onto the rail */
+  .ms{position:relative;z-index:2;flex:0 0 234px;min-height:160px;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:26px 26px;background:var(--card);border:1px solid var(--line2);border-left-width:2px;border-radius:6px;text-align:left;transition:transform .25s cubic-bezier(.2,.7,.2,1),border-color .25s}
+  .ms.green-accent{border-left-color:var(--green2)}
+  .ms.orange-accent{border-left-color:var(--orange)}
+  .ms.green-accent:hover{transform:translateY(-4px);border-color:rgba(0,160,138,.5)}
+  .ms.orange-accent:hover{transform:translateY(-4px);border-color:rgba(232,119,34,.5)}
 
-  /* Year — small italic label, the typographic grace note */
-  .ms-year{font-family:var(--display);font-style:italic;font-weight:700;font-size:15px;letter-spacing:0.01em;line-height:1;margin-bottom:10px;position:relative;padding-bottom:8px}
+  /* Node where the rail meets the card, at its middle-left */
+  .ms-dot{position:absolute;top:50%;left:0;width:11px;height:11px;border-radius:50%;transform:translate(-50%,-50%);z-index:3;border:2px solid var(--bg)}
+  .ms.green-accent .ms-dot{background:var(--green2);box-shadow:0 0 0 3px rgba(0,160,138,.14)}
+  .ms.orange-accent .ms-dot{background:var(--orange);box-shadow:0 0 0 3px rgba(232,119,34,.14)}
+  .ms-tick{display:none}
+
+  /* Year, the hero element */
+  .ms-year{font-family:var(--display);font-style:italic;font-weight:800;font-size:34px;line-height:.95;letter-spacing:0.005em}
   .ms.green-accent .ms-year{color:var(--green2)}
   .ms.orange-accent .ms-year{color:var(--orange)}
-  .ms-year::after{content:"";position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:18px;height:1px;background:currentColor;opacity:.4}
+  .ms-year::after{content:"";display:block;width:26px;height:2px;margin:13px 0 12px;background:currentColor;opacity:.4}
 
-  /* Title — the moment */
-  .ms-title{font-family:var(--display);font-weight:700;font-size:11.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--fg);line-height:1.35;max-width:130px}
+  /* Title, the moment */
+  .ms-title{font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:0.13em;text-transform:uppercase;color:var(--fg);line-height:1.3}
 
-  /* Context — small grey sub-line */
-  .ms-context{font-family:var(--sans);font-weight:400;font-size:10.5px;color:var(--muted);line-height:1.4;margin-top:6px;letter-spacing:0.02em;max-width:130px}
+  /* Context */
+  .ms-context{font-family:var(--sans);font-weight:400;font-size:12px;color:var(--muted);line-height:1.45;margin-top:7px}
 
-  /* NEXT — destination, slightly elevated */
-  .ms.next .ms-dot{width:13px;height:13px;background:var(--orange);box-shadow:0 0 0 4px rgba(232,119,34,.2),0 0 0 8px rgba(232,119,34,.07);animation:pulse 1.8s infinite}
-  .ms.next .ms-year{color:var(--orange);font-style:normal;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;font-size:12px}
+  /* NEXT card, the destination */
+  .ms.next{border-color:rgba(232,119,34,.4);border-left-color:var(--orange);background:linear-gradient(180deg,rgba(232,119,34,.06),var(--card))}
+  .ms.next .ms-dot{width:15px;height:15px;background:var(--orange);box-shadow:0 0 0 4px rgba(232,119,34,.2),0 0 0 8px rgba(232,119,34,.07);animation:pulse 1.8s infinite}
+  .ms.next .ms-year{color:var(--orange);font-style:normal;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;font-size:26px}
   .ms.next .ms-title{color:var(--orange)}
 
-  /* Responsive: wrap to a tidy grid on narrow viewports */
-  @media(max-width:980px){
-    .timeline-row{flex-wrap:wrap;gap:36px 12px;padding:40px 0 0}
-    .race-line{display:none}
-    .ms{flex:0 1 calc(33.333% - 12px);padding-top:0}
-    .ms-tick{display:none}
-    .ms-dot{position:relative;top:auto;left:auto;transform:none;margin-bottom:14px}
-    .ms-year{padding-bottom:6px}
-  }
+  /* Mobile: cards shrink a touch, arrows and swipe still work */
   @media(max-width:540px){
-    .ms{flex:0 1 calc(50% - 8px)}
+    .ms{flex:0 0 204px;min-height:148px;padding:24px 22px}
+    .ms-year{font-size:30px}
+    .tl-arrow{width:44px;height:44px}
   }
+
+  /* CALENDAR / race schedule (provisional data, track SVGs from Emil) */
+  .calendar{padding:120px 0 130px;background:var(--bg);position:relative;overflow:hidden}
+  .cal-list{display:flex;flex-direction:column;gap:12px;margin-top:48px}
+
+  .cal-row{position:relative;display:grid;grid-template-columns:86px 140px 78px 1fr auto;align-items:center;gap:24px;background:linear-gradient(90deg,var(--bg3) 0%,var(--card) 55%,#0c0c0c 100%);border:1px solid var(--line2);border-radius:12px;padding:18px 26px 18px 0;overflow:hidden;transition:transform .2s cubic-bezier(.2,.7,.2,1),border-color .2s}
+  .cal-row::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent,var(--orange))}
+  .cal-row:hover{transform:translateX(5px);border-color:rgba(255,255,255,.18)}
+
+  .cal-rnd{font-family:var(--display);font-style:italic;font-weight:800;font-size:21px;letter-spacing:0.02em;color:var(--accent,var(--orange));padding-left:26px;text-transform:uppercase}
+
+  .cal-date{font-family:var(--display);display:flex;align-items:baseline;gap:7px;white-space:nowrap}
+  .cal-date .d{font-weight:800;font-size:17px;color:var(--fg);letter-spacing:0.01em}
+  .cal-date .m{font-weight:600;font-size:12px;color:var(--muted);letter-spacing:0.14em;text-transform:uppercase}
+
+  .cal-track{display:flex;align-items:center;justify-content:center;color:var(--accent,var(--orange))}
+  .cal-track svg{width:64px;height:40px;stroke:currentColor;stroke-width:2;fill:none;opacity:.9;stroke-linejoin:round;stroke-linecap:round}
+
+  .cal-loc{font-family:var(--display);min-width:0}
+  .cal-loc .city{font-weight:800;font-size:19px;letter-spacing:-0.01em;text-transform:uppercase;color:var(--fg);line-height:1}
+  .cal-loc .ctry{font-weight:600;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+
+  .cal-flag{width:46px;height:30px;border-radius:4px;overflow:hidden;border:1px solid var(--line2);flex:none;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+  .cal-flag svg{width:100%;height:100%;display:block}
+
+  .cal-note{margin-top:24px;font-family:var(--sans);font-size:12px;color:var(--dim);letter-spacing:0.03em;display:flex;align-items:center;gap:10px}
+  .cal-note::before{content:"";width:18px;height:1px;background:var(--dim);flex:none}
+
+  @media(max-width:760px){
+    .cal-row{grid-template-columns:auto 1fr auto;gap:8px 16px;padding:16px 18px 16px 0}
+    .cal-track{display:none}
+    .cal-rnd{grid-row:1/3;align-self:center;padding-left:22px;font-size:17px}
+    .cal-date{grid-column:2;grid-row:1}
+    .cal-loc{grid-column:2;grid-row:2;margin-top:2px}
+    .cal-loc .city{font-size:17px}
+    .cal-flag{grid-column:3;grid-row:1/3;align-self:center}
+  }
+
+  /* MEDIA / press features, ManaMind editorial-card template */
+  .media{padding:120px 0 130px;background:var(--bg2);position:relative;overflow:hidden}
+  .media-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:48px}
+  @media(max-width:880px){.media-grid{grid-template-columns:1fr;gap:20px}}
+
+  .media-card{position:relative;display:block;overflow:hidden;border-radius:10px;border:1px solid var(--line2);background:var(--card);transition:transform .3s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .3s}
+  .media-card:hover{transform:translateY(-5px);border-color:rgba(232,119,34,.4);box-shadow:0 18px 44px rgba(0,0,0,.4)}
+
+  .media-thumb{position:relative;aspect-ratio:16/9;overflow:hidden;background:linear-gradient(135deg,#1a1a1a 0%,#0a0a0a 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+  .media-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+  .media-card:hover .media-thumb img{transform:scale(1.05)}
+  .media-thumb::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),transparent 60%);pointer-events:none}
+  .media-thumb .wm{font-family:var(--display);font-weight:800;font-size:30px;line-height:1;color:rgba(255,255,255,.07);text-transform:uppercase;letter-spacing:-0.02em;text-align:center;padding:0 16px}
+  .media-thumb .ph{font-family:var(--sans);font-size:10px;color:var(--dim);letter-spacing:0.18em;text-transform:uppercase;z-index:1}
+
+  .media-body{padding:26px 24px}
+  .media-src{font-family:var(--display);font-weight:600;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--green2);display:inline-block;margin-bottom:12px}
+  .media-title{font-family:var(--display);font-weight:800;font-size:21px;line-height:1.2;letter-spacing:-0.015em;color:var(--fg);text-transform:uppercase;transition:color .25s}
+  .media-card:hover .media-title{color:var(--orange)}
+  .media-read{margin-top:18px;display:inline-flex;align-items:center;gap:7px;font-family:var(--display);font-weight:600;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);transition:color .25s}
+  .media-card:hover .media-read{color:var(--orange)}
+  .media-read svg{width:12px;height:12px;stroke:currentColor;stroke-width:2;fill:none;transition:transform .25s}
+  .media-card:hover .media-read svg{transform:translate(2px,-2px)}
+
+  .media-note{margin-top:24px;font-family:var(--sans);font-size:12px;color:var(--dim);letter-spacing:0.03em;display:flex;align-items:center;gap:10px}
+  .media-note::before{content:"";width:18px;height:1px;background:var(--dim);flex:none}
+
+  /* PARTNERS / rotating wordmark marquee, ManaMind-style */
+  .partners{padding:100px 0 110px;background:var(--bg);position:relative;overflow:hidden}
+  .partners-strip{position:relative;overflow:hidden;margin-top:44px;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 88%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 12%,#000 88%,transparent 100%)}
+  .partners-track{display:flex;width:max-content;animation:partners-scroll 28s linear infinite}
+  .partners-strip:hover .partners-track{animation-play-state:paused}
+  @keyframes partners-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  .partner{position:relative;display:inline-flex;align-items:center;padding:0 54px;font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-0.01em;text-transform:uppercase;color:var(--muted);white-space:nowrap;transition:color .25s}
+  .partner:hover{color:var(--fg)}
+  .partner::before{content:"";position:absolute;left:0;top:50%;width:7px;height:7px;background:var(--orange);opacity:.55;border-radius:1px;transform:translate(-50%,-50%) rotate(45deg)}
+
+  @media(max-width:540px){.partner{font-size:23px;padding:0 38px}}
+  @media (prefers-reduced-motion: reduce){.partners-track{animation:none}}
+
+  /* FUTURE VISION / the next step, typographic crescendo */
+  .vision{padding:130px 0 150px;background:var(--bg2);position:relative;overflow:hidden}
+  .vision-bg{position:absolute;right:-3%;top:50%;transform:translateY(-50%);font-family:var(--display);font-weight:900;font-style:italic;font-size:clamp(260px,40vw,600px);line-height:.8;letter-spacing:-0.06em;color:rgba(232,119,34,.05);pointer-events:none;user-select:none;z-index:0}
+  .vision .container{position:relative;z-index:1}
+
+  .vision-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:end;margin-top:54px}
+  @media(max-width:900px){.vision-grid{grid-template-columns:1fr;gap:44px}}
+
+  /* ascending rail + nodes */
+  .vision-steps{position:relative}
+  .vision-steps::before{content:"";position:absolute;left:6px;top:10px;bottom:16px;width:2px;background:linear-gradient(180deg,var(--green2) 0%,var(--green2) 28%,var(--orange) 100%);opacity:.55;z-index:0}
+  .vstep{position:relative;z-index:1;padding-left:34px;padding-bottom:28px}
+  .vstep:last-child{padding-bottom:0}
+  .vstep::before{content:"";position:absolute;left:0;top:7px;width:14px;height:14px;border-radius:50%;border:2px solid var(--bg2);background:var(--green2);z-index:2}
+  .vstep.s3::before{width:18px;height:18px;left:-2px;background:var(--orange);box-shadow:0 0 0 4px rgba(232,119,34,.18),0 0 22px rgba(232,119,34,.5);animation:pulse 1.8s infinite}
+
+  .vk{display:inline-block;font-family:var(--display);font-weight:600;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+  .vstep.s1 .vk{color:var(--green2)}
+  .vstep.s3 .vk{color:var(--orange)}
+  .vt{display:block;font-family:var(--display);font-weight:800;letter-spacing:-0.02em;line-height:.92;text-transform:uppercase;color:var(--muted)}
+  .vstep.s1 .vt{font-size:clamp(22px,3vw,30px)}
+  .vstep.s2 .vt{font-size:clamp(34px,5vw,52px);color:var(--fg)}
+  .vstep.s3 .vt{font-size:clamp(52px,9.5vw,116px);font-weight:900;font-style:italic;color:var(--orange);text-shadow:0 0 44px rgba(232,119,34,.35)}
+  .vsub{display:inline-block;font-family:var(--sans);font-size:12px;letter-spacing:0.03em;color:var(--dim);margin-top:9px}
+
+  .vision-copy .lead{font-family:var(--display);font-weight:600;font-size:clamp(18px,2.1vw,22px);line-height:1.42;color:var(--fg);margin-bottom:18px}
+  .vision-copy p{font-family:var(--sans);font-size:15px;line-height:1.7;color:var(--muted)}
+  .vision-copy p+p{margin-top:14px}
+  .vision-copy .vc-next{color:var(--orange);font-weight:600}
+
+  /* CONTACT / form */
+  .contact{padding:120px 0 140px;background:var(--bg);position:relative;overflow:hidden}
+  .contact-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:64px;margin-top:50px;align-items:start}
+  @media(max-width:900px){.contact-grid{grid-template-columns:1fr;gap:44px}}
+
+  .ci-lead{font-family:var(--display);font-weight:600;font-size:clamp(20px,2.3vw,26px);line-height:1.35;color:var(--fg);margin-bottom:32px}
+  .contact-socials{display:flex;flex-direction:column}
+  .contact-socials a{display:flex;align-items:center;gap:12px;padding:14px 0;font-family:var(--display);font-weight:600;font-size:14px;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted);border-top:1px solid var(--line);transition:color .2s,padding-left .2s}
+  .contact-socials a:last-child{border-bottom:1px solid var(--line)}
+  .contact-socials a:hover{color:var(--orange);padding-left:8px}
+  .contact-socials a .hd{margin-left:auto;font-family:var(--sans);font-size:11px;letter-spacing:0.08em;color:var(--dim);text-transform:none}
+
+  .contact-form{display:grid;grid-template-columns:1fr 1fr;gap:18px;color-scheme:dark}
+  .cf-field{display:flex;flex-direction:column;gap:8px}
+  .cf-field.full{grid-column:1/-1}
+  .cf-field label{font-family:var(--display);font-weight:600;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted)}
+  .cf-field input,.cf-field select,.cf-field textarea{font-family:var(--sans);font-size:15px;color:var(--fg);background:var(--card);border:1px solid var(--line2);border-radius:4px;padding:14px 16px;width:100%;transition:border-color .2s,background .2s}
+  .cf-field textarea{min-height:140px;resize:vertical}
+  .cf-field input:focus,.cf-field select:focus,.cf-field textarea:focus{outline:none;border-color:var(--orange);background:#161616}
+  .cf-field input::placeholder,.cf-field textarea::placeholder{color:var(--dim)}
+  .cf-hp{position:absolute!important;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none}
+  .cf-submit{grid-column:1/-1;display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:6px}
+  .cf-status{font-family:var(--sans);font-size:13px;line-height:1.5;color:var(--muted)}
+  .cf-status.ok{color:var(--green2)}
+  .cf-status.err{color:#e0564b}
 
   /* PARTNERSHIP BENEFITS / spec sheets */
   .benefits{padding:130px 0 140px;background:var(--bg2);position:relative;overflow:hidden}
@@ -356,11 +495,11 @@
     <nav class="nav-links">
       <a href="#story">Story</a>
       <a href="#partnership">Partnership</a>
-      <a href="#">Calendar</a>
-      <a href="#">Media</a>
+      <a href="#calendar">Calendar</a>
+      <a href="#media">Media</a>
       <a href="#">Gallery</a>
     </nav>
-    <a class="nav-cta" href="#">Partner Up →</a>
+    <a class="nav-cta" href="#contact">Partner Up →</a>
   </div>
 </header>
 
@@ -388,7 +527,7 @@
       <div>
         <p class="hero-sub">Helping brands reach <b>high-performance, tech-driven audiences</b> through racing.</p>
         <div class="hero-actions" style="margin-top:32px">
-          <a class="btn btn-primary" href="#">Partner Up →</a>
+          <a class="btn btn-primary" href="#contact">Partner Up →</a>
           <a class="btn btn-ghost" href="#">Read story ↓</a>
         </div>
       </div>
@@ -464,11 +603,17 @@
         <div class="eyebrow green">02 / The Story</div>
         <h2 style="margin-top:18px">25 years on the <span class="orange">grid.</span></h2>
       </div>
-      <div class="right"><span class="scroll-hint">Every milestone</span></div>
+      <div class="right">
+        <div class="tl-nav">
+          <button class="tl-arrow" id="tlPrev" type="button" aria-label="Previous milestones"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></button>
+          <button class="tl-arrow" id="tlNext" type="button" aria-label="Next milestones"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+        </div>
+      </div>
     </div>
 
     <div class="timeline-shell reveal">
-      <div class="timeline-row">
+      <div class="timeline-viewport" id="tlViewport">
+       <div class="timeline-track">
         <div class="race-line"></div>
 
         <div class="ms green-accent">
@@ -542,6 +687,7 @@
           <div class="ms-title">Formula 1000</div>
           <div class="ms-context">Up next</div>
         </div>
+       </div>
       </div>
     </div>
   </div>
@@ -573,10 +719,10 @@
           <li><span class="ix">01</span><span class="it">Car branding</span></li>
           <li><span class="ix">02</span><span class="it">Suit branding</span></li>
           <li><span class="ix">03</span><span class="it">Helmet branding</span></li>
-          <li class="reserved"><span class="ix">04</span><span class="it">Glove branding</span><span class="pill">Reserved · Watch / Wearable</span></li>
+          <li><span class="ix">04</span><span class="it">Glove branding</span></li>
           <li><span class="ix">05</span><span class="it">Race weekend visibility</span></li>
         </ul>
-        <div class="bf-foot"><span>5 placements</span><span class="ok">● ON TRACK</span></div>
+        <div class="bf-foot"><span>5 placements</span></div>
       </article>
 
       <!-- Block 2: Content -->
@@ -594,7 +740,7 @@
           <li><span class="ix">03</span><span class="it">Behind the scenes</span></li>
           <li><span class="ix">04</span><span class="it">Sponsor integrations</span></li>
         </ul>
-        <div class="bf-foot"><span>4 channels</span><span class="arr">● ALWAYS ON</span></div>
+        <div class="bf-foot"><span>4 channels</span></div>
       </article>
 
       <!-- Block 3: Experience -->
@@ -609,16 +755,281 @@
         <ul class="bf-list">
           <li><span class="ix">01</span><span class="it">VIP paddock passes</span></li>
           <li><span class="ix">02</span><span class="it">Driver's motorhome access</span></li>
-          <li><span class="ix">03</span><span class="it">Race calendar</span></li>
         </ul>
-        <div class="bf-foot"><span>Invite only</span><span class="arr">● PADDOCK</span></div>
+        <div class="bf-foot"><span>Invite only</span></div>
       </article>
 
     </div>
+  </div>
+</section>
 
-    <div class="benefits-note reveal">
-      <span>All three blocks are available as a <b>single packet</b>. Custom builds welcome.</span>
-      <a class="cta" href="#">Build your packet →</a>
+<!-- 04 CALENDAR / race schedule -->
+<section class="section calendar" id="calendar">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div>
+        <div class="eyebrow green">04 / Calendar</div>
+        <h2 style="margin-top:18px">The <span class="orange">2026</span> season.</h2>
+      </div>
+      <div class="right">Provisional</div>
+    </div>
+
+    <div class="cal-list reveal">
+
+      <div class="cal-row" style="--accent:var(--green2)">
+        <div class="cal-rnd">R01</div>
+        <div class="cal-date"><span class="d">11&ndash;12</span><span class="m">April</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M6 28 C8 14 24 12 32 22 C40 32 50 14 64 18 C76 22 74 36 58 36 C40 36 4 44 6 28 Z"/></svg></div>
+        <div class="cal-loc"><div class="city">Silverstone</div><div class="ctry">Great Britain</div></div>
+        <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
+      </div>
+
+      <div class="cal-row" style="--accent:var(--orange)">
+        <div class="cal-rnd">R02</div>
+        <div class="cal-date"><span class="d">02&ndash;03</span><span class="m">May</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M10 30 C8 16 22 10 34 18 C44 24 58 12 70 20 C78 26 68 40 52 36 C34 32 12 44 10 30 Z"/></svg></div>
+        <div class="cal-loc"><div class="city">Brands Hatch</div><div class="ctry">Great Britain</div></div>
+        <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
+      </div>
+
+      <div class="cal-row" style="--accent:var(--green2)">
+        <div class="cal-rnd">R03</div>
+        <div class="cal-date"><span class="d">30&ndash;31</span><span class="m">May</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M8 22 C16 10 28 16 36 26 C44 36 56 20 68 24 C76 27 72 40 54 38 C32 36 2 34 8 22 Z"/></svg></div>
+        <div class="cal-loc"><div class="city">Snetterton</div><div class="ctry">Great Britain</div></div>
+        <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
+      </div>
+
+      <div class="cal-row" style="--accent:var(--orange)">
+        <div class="cal-rnd">R04</div>
+        <div class="cal-date"><span class="d">27&ndash;28</span><span class="m">June</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M12 26 C14 12 32 12 38 24 C42 32 56 18 70 26 C76 30 66 40 50 36 C30 31 10 40 12 26 Z"/></svg></div>
+        <div class="cal-loc"><div class="city">Croft</div><div class="ctry">Great Britain</div></div>
+        <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
+      </div>
+
+      <div class="cal-row" style="--accent:var(--green2)">
+        <div class="cal-rnd">R05</div>
+        <div class="cal-date"><span class="d">25&ndash;26</span><span class="m">July</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M6 30 C10 14 30 16 36 26 C40 33 52 16 66 20 C78 23 76 38 56 38 C36 38 4 44 6 30 Z"/></svg></div>
+        <div class="cal-loc"><div class="city">Cadwell Park</div><div class="ctry">Great Britain</div></div>
+        <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
+      </div>
+
+      <div class="cal-row" style="--accent:var(--orange)">
+        <div class="cal-rnd">R06</div>
+        <div class="cal-date"><span class="d">29&ndash;30</span><span class="m">August</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M10 24 C18 10 30 18 40 24 C50 30 60 16 72 22 C80 26 70 40 52 36 C30 31 4 36 10 24 Z"/></svg></div>
+        <div class="cal-loc"><div class="city">Oulton Park</div><div class="ctry">Great Britain</div></div>
+        <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
+      </div>
+
+      <div class="cal-row" style="--accent:var(--orange)">
+        <div class="cal-rnd">R07</div>
+        <div class="cal-date"><span class="d">26&ndash;27</span><span class="m">September</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M8 26 C12 12 28 14 36 22 C46 31 58 14 70 22 C78 27 70 40 52 36 C32 31 6 40 8 26 Z"/></svg></div>
+        <div class="cal-loc"><div class="city">Donington Park</div><div class="ctry">Great Britain</div></div>
+        <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
+      </div>
+
+    </div>
+
+    <div class="cal-note reveal">Provisional schedule with placeholder circuits and track graphics. Final rounds, dates and SVGs to be supplied by Emil.</div>
+  </div>
+</section>
+
+<!-- 05 MEDIA / press features -->
+<section class="section media" id="media">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div>
+        <div class="eyebrow">05 / Media</div>
+        <h2 style="margin-top:18px">In the <span class="orange">press.</span></h2>
+      </div>
+      <div class="right">Featured</div>
+    </div>
+
+    <div class="media-grid reveal">
+
+      <a class="media-card" href="https://blog.demon-tweeks.com/motorsport/teamdt-in-the-spotlight-emil-kostadinov/" target="_blank" rel="noopener">
+        <div class="media-thumb"><img src="./media/demon-tweeks.jpg" alt="#TeamDT In The Spotlight: Emil Kostadinov"></div>
+        <div class="media-body">
+          <span class="media-src">Demon Tweeks</span>
+          <div class="media-title">#TeamDT In The Spotlight: Emil Kostadinov</div>
+          <span class="media-read">Read feature
+            <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <a class="media-card" href="https://www.autosport.com/national/news/national-novelties-fiat-panda-and-a-very-modified-mx-5/10510582/" target="_blank" rel="noopener">
+        <div class="media-thumb"><img src="./media/autosport.jpg" alt="National novelties: Fiat Panda and a very modified MX-5"></div>
+        <div class="media-body">
+          <span class="media-src">Autosport</span>
+          <div class="media-title">National Novelties: Fiat Panda And A Very Modified MX-5</div>
+          <span class="media-read">Read feature
+            <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <a class="media-card" href="https://www.linkedin.com/posts/ewor_ewor-startups-fundraising-activity-7455879665224962048-pDtH" target="_blank" rel="noopener">
+        <div class="media-thumb"><img src="./media/ewor.jpg" alt="EWOR feature on LinkedIn"></div>
+        <div class="media-body">
+          <span class="media-src">EWOR &middot; LinkedIn</span>
+          <div class="media-title">Backed by EWOR</div>
+          <span class="media-read">Read feature
+            <svg viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- 06 PARTNERS / rotating marquee -->
+<section class="section partners" id="partners">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div>
+        <div class="eyebrow green">06 / Partners</div>
+        <h2 style="margin-top:18px">In good <span class="orange">company.</span></h2>
+      </div>
+      <div class="right">Hover to pause</div>
+    </div>
+  </div>
+
+  <div class="partners-strip reveal">
+    <div class="partners-track">
+      <!-- First half (focusable) -->
+      <a class="partner" href="https://manamind.ai" target="_blank" rel="noopener">ManaMind</a>
+      <a class="partner" href="https://ascension.vc" target="_blank" rel="noopener">Ascension VC</a>
+      <a class="partner" href="https://pilotgo.ai" target="_blank" rel="noopener">PilotGo</a>
+      <a class="partner" href="https://manamind.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">ManaMind</a>
+      <a class="partner" href="https://ascension.vc" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">Ascension VC</a>
+      <a class="partner" href="https://pilotgo.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">PilotGo</a>
+      <a class="partner" href="https://manamind.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">ManaMind</a>
+      <a class="partner" href="https://ascension.vc" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">Ascension VC</a>
+      <a class="partner" href="https://pilotgo.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">PilotGo</a>
+      <a class="partner" href="https://manamind.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">ManaMind</a>
+      <a class="partner" href="https://ascension.vc" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">Ascension VC</a>
+      <a class="partner" href="https://pilotgo.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">PilotGo</a>
+      <!-- Second half (exact duplicate, for the seamless -50% loop) -->
+      <a class="partner" href="https://manamind.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">ManaMind</a>
+      <a class="partner" href="https://ascension.vc" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">Ascension VC</a>
+      <a class="partner" href="https://pilotgo.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">PilotGo</a>
+      <a class="partner" href="https://manamind.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">ManaMind</a>
+      <a class="partner" href="https://ascension.vc" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">Ascension VC</a>
+      <a class="partner" href="https://pilotgo.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">PilotGo</a>
+      <a class="partner" href="https://manamind.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">ManaMind</a>
+      <a class="partner" href="https://ascension.vc" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">Ascension VC</a>
+      <a class="partner" href="https://pilotgo.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">PilotGo</a>
+      <a class="partner" href="https://manamind.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">ManaMind</a>
+      <a class="partner" href="https://ascension.vc" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">Ascension VC</a>
+      <a class="partner" href="https://pilotgo.ai" target="_blank" rel="noopener" aria-hidden="true" tabindex="-1">PilotGo</a>
+    </div>
+  </div>
+</section>
+
+<!-- 07 FUTURE VISION / the next step -->
+<section class="section vision" id="vision">
+  <div class="vision-bg" aria-hidden="true">1000</div>
+  <div class="container">
+    <div class="sec-head reveal">
+      <div>
+        <div class="eyebrow">07 / Future Vision</div>
+        <h2 style="margin-top:18px">The road <span class="orange">ahead.</span></h2>
+      </div>
+      <div class="right">Formula 1000</div>
+    </div>
+
+    <div class="vision-grid">
+
+      <div class="vision-steps reveal">
+        <div class="vstep s1">
+          <span class="vk">01 / Then</span>
+          <span class="vt">RC Racing</span>
+          <span class="vsub">Age 7</span>
+        </div>
+        <div class="vstep s2">
+          <span class="vk">02 / Now</span>
+          <span class="vt">Single-Seaters</span>
+          <span class="vsub">Today</span>
+        </div>
+        <div class="vstep s3">
+          <span class="vk">03 / Next</span>
+          <span class="vt">Formula 1000</span>
+        </div>
+      </div>
+
+      <div class="vision-copy reveal">
+        <p class="lead">Every step in my career has been about progression, from RC racing at 7 to single-seaters today.</p>
+        <p>The next step is <span class="vc-next">Formula 1000</span>.</p>
+        <p>It&rsquo;s a faster, more competitive category that represents a real leap forward, not just in performance, but in the scale of what can be built around it.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 08 CONTACT / form -->
+<section class="section contact" id="contact">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div>
+        <div class="eyebrow green">08 / Contact</div>
+        <h2 style="margin-top:18px">Partner <span class="orange">up.</span></h2>
+      </div>
+      <div class="right">Let&rsquo;s talk</div>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-intro reveal">
+        <p class="ci-lead">Interested in partnering, media, or a conversation? Send a message and I&rsquo;ll get back to you.</p>
+        <div class="contact-socials">
+          <a href="https://www.instagram.com/ek19racing/" target="_blank" rel="noopener">Instagram <span class="hd">@ek19racing</span></a>
+          <a href="https://www.tiktok.com/@ek19racing" target="_blank" rel="noopener">TikTok <span class="hd">@ek19racing</span></a>
+          <a href="https://www.youtube.com/@ek19racing" target="_blank" rel="noopener">YouTube <span class="hd">@ek19racing</span></a>
+        </div>
+      </div>
+
+      <form class="contact-form reveal" id="contactForm">
+        <input type="hidden" name="access_key" value="YOUR_WEB3FORMS_ACCESS_KEY">
+        <input type="hidden" name="subject" value="New enquiry from EK19 Racing site">
+        <input type="hidden" name="from_name" value="EK19 Racing Website">
+        <input type="checkbox" name="botcheck" class="cf-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <div class="cf-field">
+          <label for="cf-name">Name</label>
+          <input id="cf-name" type="text" name="name" placeholder="Your name" required>
+        </div>
+        <div class="cf-field">
+          <label for="cf-email">Email</label>
+          <input id="cf-email" type="email" name="email" placeholder="you@brand.com" required>
+        </div>
+        <div class="cf-field">
+          <label for="cf-company">Company <span style="color:var(--dim)">(optional)</span></label>
+          <input id="cf-company" type="text" name="company" placeholder="Company or brand">
+        </div>
+        <div class="cf-field">
+          <label for="cf-interest">Interest</label>
+          <select id="cf-interest" name="interest">
+            <option>Sponsorship / Partnership</option>
+            <option>Media</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="cf-field full">
+          <label for="cf-message">Message</label>
+          <textarea id="cf-message" name="message" placeholder="Tell me a bit about what you have in mind" required></textarea>
+        </div>
+
+        <div class="cf-submit">
+          <button class="btn btn-primary" type="submit">Send message</button>
+          <span class="cf-status" role="status" aria-live="polite"></span>
+        </div>
+      </form>
     </div>
   </div>
 </section>
@@ -642,6 +1053,61 @@
 
 <script>
 (() => {
+  // Story timeline: arrow-driven horizontal scroll. Native scroll only,
+  // no wheel hijack, no sticky pin, no drag state. Runs regardless of motion pref.
+  const tlVp = document.getElementById('tlViewport');
+  const tlPrev = document.getElementById('tlPrev');
+  const tlNext = document.getElementById('tlNext');
+  if (tlVp && tlPrev && tlNext) {
+    const step = () => {
+      const card = tlVp.querySelector('.ms');
+      const w = card ? card.getBoundingClientRect().width + 18 : 240;
+      return Math.max(w, Math.floor(tlVp.clientWidth * 0.8));
+    };
+    const sync = () => {
+      const max = tlVp.scrollWidth - tlVp.clientWidth - 2;
+      tlPrev.disabled = tlVp.scrollLeft <= 2;
+      tlNext.disabled = tlVp.scrollLeft >= max;
+    };
+    tlPrev.addEventListener('click', () => tlVp.scrollBy({ left: -step(), behavior: 'smooth' }));
+    tlNext.addEventListener('click', () => tlVp.scrollBy({ left: step(), behavior: 'smooth' }));
+    tlVp.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  }
+
+  // Contact form: posts to Web3Forms, no page reload, graceful if unconfigured
+  const cf = document.getElementById('contactForm');
+  if (cf) {
+    const status = cf.querySelector('.cf-status');
+    cf.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const key = (cf.querySelector('input[name="access_key"]').value || '').trim();
+      if (!key || key.startsWith('YOUR_')) {
+        status.textContent = 'Contact form is not connected yet. Add the Web3Forms access key to enable sending.';
+        status.className = 'cf-status err';
+        return;
+      }
+      status.textContent = 'Sending…';
+      status.className = 'cf-status';
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: new FormData(cf) });
+        const data = await res.json();
+        if (data.success) {
+          cf.reset();
+          status.textContent = 'Thanks. Your message has been sent.';
+          status.className = 'cf-status ok';
+        } else {
+          status.textContent = data.message || 'Something went wrong. Please try again.';
+          status.className = 'cf-status err';
+        }
+      } catch (err) {
+        status.textContent = 'Network error. Please try again.';
+        status.className = 'cf-status err';
+      }
+    });
+  }
+
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduced) return;
 
