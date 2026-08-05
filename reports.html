@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Race Reports · EK19 · Emil Kostadinov</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;--bg2:#0e0e0e;--bg3:#141414;--card:#111111;
+    --line:#1f1f1f;--line2:#2c2c2c;
+    --fg:#f5f5f0;--muted:#999;--dim:#5a5a5a;
+    --green:#006a5e;--green2:#00a08a;
+    --orange:#e87722;--orange2:#ff8c33;
+    --display:'Archivo',-apple-system,sans-serif;
+    --sans:'Inter',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1040px;margin:0 auto;padding:0 40px}
+  @media(max-width:640px){.container{padding:0 20px}}
+
+  /* Top bar (matches gallery.html) */
+  .gnav{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(10,10,10,.96) 60%,rgba(10,10,10,0));padding:20px 0;backdrop-filter:blur(6px)}
+  .gnav-inner{max-width:1040px;margin:0 auto;padding:0 40px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .gnav img{height:30px;width:auto}
+  .gback{display:inline-flex;align-items:center;gap:9px;font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+  .gback:hover{color:var(--orange)}
+  .gback svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.2;fill:none;transform:rotate(180deg)}
+  @media(max-width:640px){.gnav-inner{padding:0 20px}}
+
+  /* Page header */
+  .ghead{padding:64px 0 34px}
+  .ghead .eyebrow{font-family:var(--sans);font-weight:600;font-size:12px;letter-spacing:0.25em;text-transform:uppercase;color:var(--orange);display:inline-flex;align-items:center;gap:10px}
+  .ghead .eyebrow::before{content:"";width:24px;height:1px;background:var(--orange)}
+  .ghead h1{font-family:var(--display);font-weight:800;letter-spacing:-0.03em;font-size:clamp(38px,6vw,72px);line-height:0.98;margin-top:22px}
+  .ghead h1 span{color:var(--orange)}
+  .gsub{margin-top:20px;max-width:560px;color:var(--muted);font-size:15px;line-height:1.6}
+
+  /* Coming soon */
+  .soon{margin:30px 0 130px;border:1px solid var(--line);border-radius:6px;background:var(--bg2);padding:60px 40px;text-align:center}
+  .soon-badge{display:inline-flex;align-items:center;gap:9px;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#ffb877;background:rgba(232,119,34,.1);border:1px solid rgba(232,119,34,.3);padding:9px 16px;border-radius:3px}
+  .soon-badge::before{content:"";width:7px;height:7px;background:var(--orange);border-radius:50%}
+  .soon p{margin:22px auto 0;max-width:520px;color:var(--muted);font-size:15px;line-height:1.65}
+
+  /* ---- One race report ---- */
+  .rep{padding:70px 0;border-top:1px solid var(--line)}
+  .rep:first-child{border-top:none}
+  .rep-label{font-family:var(--display);font-weight:600;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:var(--dim)}
+  .rep-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-top:26px;padding-bottom:30px;border-bottom:1px solid var(--line)}
+  .rep-meta .m k{display:block;font-family:var(--display);font-weight:600;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+  .rep-meta .m v{display:block;font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:0.01em;color:var(--fg)}
+  @media(max-width:640px){.rep-meta{grid-template-columns:repeat(2,1fr);gap:18px}}
+
+  /* Hero */
+  .rep-hero{margin-top:34px;border-radius:5px;overflow:hidden;background:var(--bg3);aspect-ratio:16/9}
+  .rep-hero img{width:100%;height:100%;object-fit:cover;display:block}
+  .rep-cap{margin-top:11px;font-size:12px;color:var(--dim);font-style:italic}
+
+  /* Stat strip */
+  .rep-stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:34px}
+  .rep-stat{background:#000;border:1px solid var(--line2);border-radius:5px;padding:16px 16px 18px;min-height:78px;display:flex;flex-direction:column;justify-content:space-between}
+  .rep-stat k{font-family:var(--display);font-weight:600;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted)}
+  .rep-stat v{font-family:var(--display);font-weight:800;font-size:26px;letter-spacing:-0.02em;color:var(--fg);line-height:1}
+  .rep-stat.hl v{color:var(--orange)}
+  @media(max-width:640px){.rep-stats{grid-template-columns:repeat(3,1fr)}.rep-stat v{font-size:22px}}
+
+  /* Written sections */
+  .rep-block{margin-top:48px}
+  .rep-h{font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:0.16em;text-transform:uppercase;color:var(--orange)}
+  .rep-h span{color:var(--dim)}
+  .rep-p{margin-top:16px;font-size:16px;line-height:1.75;color:#d8d8d2;max-width:720px;white-space:pre-line}
+  .rep-photo{margin-top:26px;border-radius:5px;overflow:hidden;background:var(--bg3);aspect-ratio:16/9}
+  .rep-photo img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* Footer */
+  footer{border-top:1px solid var(--line);padding:40px 0 60px;margin-top:40px}
+  .ft-bottom{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:12px;color:var(--dim);letter-spacing:0.04em}
+</style>
+</head>
+<body>
+
+<div class="gnav">
+  <div class="gnav-inner">
+    <a class="gback" href="index.html#reports">
+      <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to site
+    </a>
+    <img src="./logo.png" alt="EK19">
+  </div>
+</div>
+
+<div class="container">
+  <div class="ghead">
+    <div class="eyebrow">Race Reports</div>
+    <h1>From the <span>cockpit.</span></h1>
+    <p class="gsub">Race-by-race reports from the season. Qualifying, the races, the numbers, and how each weekend unfolded.</p>
+  </div>
+
+  <div id="reports-root"></div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="ft-bottom">
+      <span>© 2026 — Emil Kostadinov · EK19</span>
+      <span>Site by Aniket Parihar</span>
+    </div>
+  </div>
+</footer>
+
+<script src="./reports-data.js"></script>
+<script>
+(() => {
+  const root = document.getElementById('reports-root');
+  const reports = (window.RACE_REPORTS || []).filter(r => r && (r.date || r.circuit));
+
+  const esc = (s) => String(s == null ? '' : s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+  if (!reports.length) {
+    root.innerHTML =
+      '<div class="soon">' +
+        '<div class="soon-badge">Coming soon</div>' +
+        '<p>The first race report is on its way. Check back after the next round for the full weekend breakdown.</p>' +
+      '</div>';
+    return;
+  }
+
+  const metaCell = (k, val) => val ? '<div class="m"><k>'+esc(k)+'</k><v>'+esc(val)+'</v></div>' : '';
+  const stat = (k, val, hl) => '<div class="rep-stat'+(hl?' hl':'')+'"><k>'+esc(k)+'</k><v>'+esc(val || '—')+'</v></div>';
+
+  const block = (num, title, text, photo, alt) => {
+    if (!text && !photo) return '';
+    let h = '<div class="rep-block"><div class="rep-h"><span>'+num+' / </span>'+esc(title)+'</div>';
+    if (text) h += '<p class="rep-p">'+esc(text)+'</p>';
+    if (photo) h += '<div class="rep-photo"><img src="'+esc(photo)+'" alt="'+esc(alt)+'" loading="lazy"></div>';
+    return h + '</div>';
+  };
+
+  root.innerHTML = reports.map(r => {
+    const s = r.stats || {};
+    let h = '<article class="rep">';
+    h += '<div class="rep-label">EK19 · Race Report</div>';
+    h += '<div class="rep-meta">' +
+           metaCell('Date', r.date) +
+           metaCell('Circuit', r.circuit) +
+           metaCell('Series', r.series) +
+           metaCell('Car', r.car) +
+         '</div>';
+    if (r.hero) {
+      h += '<div class="rep-hero"><img src="'+esc(r.hero)+'" alt="'+esc(r.circuit || 'Race')+' hero shot" loading="lazy"></div>';
+      if (r.heroCaption) h += '<div class="rep-cap">'+esc(r.heroCaption)+'</div>';
+    }
+    if (s.quali || s.race1 || s.race2 || s.bestLap || s.laps) {
+      h += '<div class="rep-stats">' +
+             stat('Quali', s.quali) +
+             stat('Race 1', s.race1) +
+             stat('Race 2', s.race2) +
+             stat('Best lap', s.bestLap, true) +
+             stat('Laps', s.laps) +
+           '</div>';
+    }
+    h += block('01', 'Qualifying', r.qualifying, null);
+    h += block('02', 'Race 1', r.race1, r.race1Photo, (r.circuit || '') + ' Race 1');
+    h += block('03', 'Race 2', r.race2, r.race2Photo, (r.circuit || '') + ' Race 2');
+    h += '</article>';
+    return h;
+  }).join('');
+})();
+</script>
+
+</body>
+</html>

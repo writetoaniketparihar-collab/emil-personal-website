@@ -99,9 +99,12 @@
   .sec-head .right{font-family:var(--display);font-weight:600;font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:0.18em}
 
   /* Featured row */
-  .featured{display:flex;align-items:center;gap:48px;flex-wrap:wrap;padding:24px 0;border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);margin-bottom:64px}
+  .featured{display:flex;align-items:center;gap:38px;flex-wrap:wrap;padding:24px 0;border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);margin-bottom:64px}
   .featured .ftl{font-family:var(--display);font-weight:600;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--dim)}
   .featured .l{font-family:var(--display);font-weight:600;font-size:18px;color:var(--muted);letter-spacing:-0.01em;text-transform:uppercase}
+  .featured .fl-link{display:inline-flex;align-items:center}
+  .featured .fl{height:24px;max-width:165px;width:auto;object-fit:contain;filter:brightness(0) invert(1);opacity:.5;transition:opacity .25s}
+  .featured .fl-link:hover .fl{opacity:.9}
 
   /* STATS CARD */
   .stats-card{background:var(--card);border:1px solid var(--line2);border-radius:6px;overflow:hidden;position:relative}
@@ -224,6 +227,10 @@
   .cal-flag{width:46px;height:30px;border-radius:4px;overflow:hidden;border:1px solid var(--line2);flex:none;box-shadow:0 2px 8px rgba(0,0,0,.4)}
   .cal-flag svg{width:100%;height:100%;display:block}
 
+  .cal-row.past{opacity:.5;filter:grayscale(.85)}
+  .cal-row.past:hover{transform:none;border-color:var(--line2)}
+  .cal-row.past .cal-done{position:absolute;right:84px;top:50%;transform:translateY(-50%);font-family:var(--sans);font-size:9px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line2);border-radius:20px;padding:3px 10px;white-space:nowrap}
+
   .cal-note{margin-top:24px;font-family:var(--sans);font-size:12px;color:var(--dim);letter-spacing:0.03em;display:flex;align-items:center;gap:10px}
   .cal-note::before{content:"";width:18px;height:1px;background:var(--dim);flex:none}
 
@@ -235,6 +242,7 @@
     .cal-loc{grid-column:2;grid-row:2;margin-top:2px}
     .cal-loc .city{font-size:17px}
     .cal-flag{grid-column:3;grid-row:1/3;align-self:center}
+    .cal-row.past .cal-done{display:none}
   }
 
   /* MEDIA / press features, ManaMind editorial-card template */
@@ -263,6 +271,22 @@
 
   .media-note{margin-top:24px;font-family:var(--sans);font-size:12px;color:var(--dim);letter-spacing:0.03em;display:flex;align-items:center;gap:10px}
   .media-note::before{content:"";width:18px;height:1px;background:var(--dim);flex:none}
+
+  /* GALLERY preview (homepage) */
+  .gallery-sec{background:var(--bg2)}
+  .gal-preview{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+  @media(max-width:640px){.gal-preview{gap:8px}}
+  .gal-item{position:relative;overflow:hidden;border-radius:8px;border:1px solid var(--line2);background:linear-gradient(135deg,#1a1a1a,#0c0c0c);flex:1 1 240px;height:240px}
+  .gal-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+  .gal-item:hover img{transform:scale(1.05)}
+  .gal-item::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.35),transparent 55%);opacity:0;transition:opacity .3s}
+  .gal-item:hover::after{opacity:1}
+  .gal-item.ph{display:flex;align-items:center;justify-content:center;color:var(--dim)}
+  .gal-item.ph span{font-family:var(--display);font-weight:600;font-size:10px;letter-spacing:0.2em;text-transform:uppercase}
+  .gal-cta-row{margin-top:40px;display:flex;justify-content:center}
+  .gal-btn{display:inline-flex;align-items:center;gap:11px;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;color:#000;background:var(--orange);padding:16px 32px;border-radius:2px;transition:background .15s,transform .15s}
+  .gal-btn:hover{background:var(--orange2);transform:translateY(-2px)}
+  .gal-btn svg{width:15px;height:15px;stroke:currentColor;stroke-width:2.2;fill:none}
 
   /* PARTNERS / rotating wordmark marquee, ManaMind-style */
   .partners{padding:100px 0 110px;background:var(--bg);position:relative;overflow:hidden}
@@ -497,7 +521,8 @@
       <a href="#partnership">Partnership</a>
       <a href="#calendar">Calendar</a>
       <a href="#media">Media</a>
-      <a href="#">Gallery</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#reports">Reports</a>
     </nav>
     <a class="nav-cta" href="#contact">Partner Up →</a>
   </div>
@@ -528,7 +553,7 @@
         <p class="hero-sub">Helping brands reach <b>high-performance, tech-driven audiences</b> through racing.</p>
         <div class="hero-actions" style="margin-top:32px">
           <a class="btn btn-primary" href="#contact">Partner Up →</a>
-          <a class="btn btn-ghost" href="#">Read story ↓</a>
+          <a class="btn btn-ghost" href="#story">Read story ↓</a>
         </div>
       </div>
       <div class="hero-stats">
@@ -553,10 +578,12 @@
 
     <div class="featured reveal">
       <span class="ftl">Featured in</span>
-      <span class="l">Demon Tweeks</span>
-      <span class="l">Autosport</span>
-      <span class="l">EWOR</span>
-      <span class="l">Motorsport.com</span>
+      <a class="fl-link" href="https://blog.demon-tweeks.com/motorsport/teamdt-in-the-spotlight-emil-kostadinov/" target="_blank" rel="noopener" aria-label="Demon Tweeks feature on Emil Kostadinov"><img class="fl" src="./media/logos/demon-tweeks.png" alt="Demon Tweeks"></a>
+      <a class="fl-link" href="https://www.autosport.com/national/news/national-novelties-fiat-panda-and-a-very-modified-mx-5/10510582/" target="_blank" rel="noopener" aria-label="Autosport national feature"><img class="fl" src="./media/logos/autosport.svg" alt="Autosport"></a>
+      <a class="fl-link" href="https://www.linkedin.com/posts/ewor_ewor-startups-fundraising-activity-7455879665224962048-pDtH" target="_blank" rel="noopener" aria-label="EWOR feature"><img class="fl" src="./media/logos/ewor.svg" alt="EWOR"></a>
+      <a class="fl-link" href="https://www.autosport.com/national/news/national-novelties-fiat-panda-and-a-very-modified-mx-5/10510582/" target="_blank" rel="noopener" aria-label="Motorsport national feature"><img class="fl" src="./media/logos/motorsport.svg" alt="Motorsport.com"></a>
+      <a class="fl-link" href="https://tech.eu/2026/04/30/manamind-secures-15m-to-develop-autonomous-testing-for-gaming/" target="_blank" rel="noopener" aria-label="tech.eu ManaMind feature"><img class="fl" src="./media/logos/tech.svg" alt="tech.eu"></a>
+      <a class="fl-link" href="https://www.forbes.com/sites/charliefink/2025/11/17/manamind-introduces-game-playing-ai-to-test-titles-in-production/" target="_blank" rel="noopener" aria-label="Forbes ManaMind feature"><img class="fl" src="./media/logos/forbes.svg" alt="Forbes"></a>
     </div>
 
     <div class="stats-card reveal">
@@ -701,7 +728,6 @@
         <div class="eyebrow">03 / Partnership</div>
         <h2 style="margin-top:18px">What <span class="orange">partners</span> get.</h2>
       </div>
-      <div class="right">Three tiers · one packet</div>
     </div>
 
     <div class="benefits-grid reveal">
@@ -754,7 +780,7 @@
         </header>
         <ul class="bf-list">
           <li><span class="ix">01</span><span class="it">VIP paddock passes</span></li>
-          <li><span class="ix">02</span><span class="it">Driver's motorhome access</span></li>
+          <li><span class="ix">02</span><span class="it">Motorhome access</span></li>
         </ul>
         <div class="bf-foot"><span>Invite only</span></div>
       </article>
@@ -771,70 +797,70 @@
         <div class="eyebrow green">04 / Calendar</div>
         <h2 style="margin-top:18px">The <span class="orange">2026</span> season.</h2>
       </div>
-      <div class="right">Provisional</div>
+      <div class="right">7 rounds</div>
     </div>
 
     <div class="cal-list reveal">
 
-      <div class="cal-row" style="--accent:var(--green2)">
+      <div class="cal-row" style="--accent:var(--green2)" data-end="2026-04-06">
         <div class="cal-rnd">R01</div>
-        <div class="cal-date"><span class="d">11&ndash;12</span><span class="m">April</span></div>
-        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M6 28 C8 14 24 12 32 22 C40 32 50 14 64 18 C76 22 74 36 58 36 C40 36 4 44 6 28 Z"/></svg></div>
-        <div class="cal-loc"><div class="city">Silverstone</div><div class="ctry">Great Britain</div></div>
+        <div class="cal-date"><span class="d">6</span><span class="m">April</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M14 24 C14 15 24 11 34 13 C44 15 54 10 62 14 C70 17 70 25 62 28 C56 30 50 27 44 29 C38 31 34 30 30 31 C24 33 18 31 14 24 Z"/></svg></div>
+        <div class="cal-loc"><div class="city">Donington Park</div><div class="ctry">National &middot; Great Britain</div></div>
         <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
       </div>
 
-      <div class="cal-row" style="--accent:var(--orange)">
+      <div class="cal-row" style="--accent:var(--orange)" data-end="2026-05-24">
         <div class="cal-rnd">R02</div>
-        <div class="cal-date"><span class="d">02&ndash;03</span><span class="m">May</span></div>
-        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M10 30 C8 16 22 10 34 18 C44 24 58 12 70 20 C78 26 68 40 52 36 C34 32 12 44 10 30 Z"/></svg></div>
-        <div class="cal-loc"><div class="city">Brands Hatch</div><div class="ctry">Great Britain</div></div>
+        <div class="cal-date"><span class="d">23&ndash;24</span><span class="m">May</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M14 18 C14 14 18 12 24 13 C34 14 44 12 54 14 C62 15 68 18 66 24 C64 29 58 27 52 28 C46 29 44 24 38 26 C32 28 30 32 24 32 C18 32 14 28 14 18 Z"/></svg></div>
+        <div class="cal-loc"><div class="city">Pembrey</div><div class="ctry">Great Britain</div></div>
         <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
       </div>
 
-      <div class="cal-row" style="--accent:var(--green2)">
+      <div class="cal-row" style="--accent:var(--green2)" data-end="2026-06-21">
         <div class="cal-rnd">R03</div>
-        <div class="cal-date"><span class="d">30&ndash;31</span><span class="m">May</span></div>
-        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M8 22 C16 10 28 16 36 26 C44 36 56 20 68 24 C76 27 72 40 54 38 C32 36 2 34 8 22 Z"/></svg></div>
-        <div class="cal-loc"><div class="city">Snetterton</div><div class="ctry">Great Britain</div></div>
+        <div class="cal-date"><span class="d">20&ndash;21</span><span class="m">June</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M10 26 C10 18 18 16 26 18 C34 20 38 14 44 16 C50 18 54 14 62 16 C72 18 74 24 70 28 C66 32 58 30 50 30 C42 30 36 34 28 32 C18 30 10 32 10 26 Z"/></svg></div>
+        <div class="cal-loc"><div class="city">Snetterton</div><div class="ctry">300 &middot; Great Britain</div></div>
         <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
       </div>
 
-      <div class="cal-row" style="--accent:var(--orange)">
+      <div class="cal-row" style="--accent:var(--orange)" data-end="2026-07-19">
         <div class="cal-rnd">R04</div>
-        <div class="cal-date"><span class="d">27&ndash;28</span><span class="m">June</span></div>
-        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M12 26 C14 12 32 12 38 24 C42 32 56 18 70 26 C76 30 66 40 50 36 C30 31 10 40 12 26 Z"/></svg></div>
-        <div class="cal-loc"><div class="city">Croft</div><div class="ctry">Great Britain</div></div>
-        <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
-      </div>
-
-      <div class="cal-row" style="--accent:var(--green2)">
-        <div class="cal-rnd">R05</div>
-        <div class="cal-date"><span class="d">25&ndash;26</span><span class="m">July</span></div>
-        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M6 30 C10 14 30 16 36 26 C40 33 52 16 66 20 C78 23 76 38 56 38 C36 38 4 44 6 30 Z"/></svg></div>
+        <div class="cal-date"><span class="d">18&ndash;19</span><span class="m">July</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M38 7 C32 8 31 13 34 17 C37 21 31 24 30 29 C29 34 33 40 39 40 C45 40 46 34 44 30 C42 25 48 23 47 17 C46 12 44 7 38 7 Z"/></svg></div>
         <div class="cal-loc"><div class="city">Cadwell Park</div><div class="ctry">Great Britain</div></div>
         <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
       </div>
 
-      <div class="cal-row" style="--accent:var(--orange)">
-        <div class="cal-rnd">R06</div>
-        <div class="cal-date"><span class="d">29&ndash;30</span><span class="m">August</span></div>
-        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M10 24 C18 10 30 18 40 24 C50 30 60 16 72 22 C80 26 70 40 52 36 C30 31 4 36 10 24 Z"/></svg></div>
-        <div class="cal-loc"><div class="city">Oulton Park</div><div class="ctry">Great Britain</div></div>
+      <div class="cal-row" style="--accent:var(--green2)" data-end="2026-08-16">
+        <div class="cal-rnd">R05</div>
+        <div class="cal-date"><span class="d">15&ndash;16</span><span class="m">August</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M26 13 C38 10 52 11 62 16 C71 20 70 29 60 32 C52 34 44 32 36 33 C30 34 26 32 22 33 C16 35 16 41 21 41 C26 41 25 34 30 31 C24 28 18 24 18 20 C18 15 20 13 26 13 Z"/></svg></div>
+        <div class="cal-loc"><div class="city">Silverstone</div><div class="ctry">International &middot; Great Britain</div></div>
         <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
       </div>
 
-      <div class="cal-row" style="--accent:var(--orange)">
+      <div class="cal-row" style="--accent:var(--orange)" data-end="2026-09-20">
+        <div class="cal-rnd">R06</div>
+        <div class="cal-date"><span class="d">19&ndash;20</span><span class="m">September</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M12 30 C12 20 20 16 30 16 C40 16 48 12 56 16 C64 20 60 24 64 26 C68 28 64 30 58 30 C50 30 44 28 36 30 C28 32 18 34 12 30 Z"/></svg></div>
+        <div class="cal-loc"><div class="city">Croft</div><div class="ctry">Great Britain</div></div>
+        <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
+      </div>
+
+      <div class="cal-row" style="--accent:var(--green2)" data-end="2026-10-11">
         <div class="cal-rnd">R07</div>
-        <div class="cal-date"><span class="d">26&ndash;27</span><span class="m">September</span></div>
-        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M8 26 C12 12 28 14 36 22 C46 31 58 14 70 22 C78 27 70 40 52 36 C32 31 6 40 8 26 Z"/></svg></div>
-        <div class="cal-loc"><div class="city">Donington Park</div><div class="ctry">Great Britain</div></div>
+        <div class="cal-date"><span class="d">11</span><span class="m">October</span></div>
+        <div class="cal-track"><svg viewBox="0 0 80 48"><path d="M26 9 C38 9 43 16 42 21 C50 20 56 20 60 19 C67 18 70 23 66 27 C63 30 58 28 54 27 C50 26 46 28 42 27 C42 32 38 39 26 39 C14 39 8 32 8 24 C8 16 14 9 26 9 Z"/></svg></div>
+        <div class="cal-loc"><div class="city">Mallory Park</div><div class="ctry">Great Britain</div></div>
         <div class="cal-flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></div>
       </div>
 
     </div>
 
-    <div class="cal-note reveal">Provisional schedule with placeholder circuits and track graphics. Final rounds, dates and SVGs to be supplied by Emil.</div>
+    <div class="cal-note reveal">Provisional 2026 calendar (750 Motor Club). Circuit outlines are stylised silhouettes.</div>
   </div>
 </section>
 
@@ -888,12 +914,90 @@
   </div>
 </section>
 
-<!-- 06 PARTNERS / rotating marquee -->
+<!-- 06 GALLERY / curated race photography (PLACEHOLDER images + copy — pending Drive curation) -->
+<section class="section gallery-sec" id="gallery">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div>
+        <div class="eyebrow green">06 / Gallery</div>
+        <h2 style="margin-top:18px">On <span class="orange">track.</span></h2>
+      </div>
+      <div class="right">Selected shots</div>
+    </div>
+
+    <div class="gal-preview reveal">
+      <a class="gal-item" href="gallery.html" data-ar="1.5"><img src="./media/gallery/2026-donington-lead.jpg" alt="No.19 leads the pack at Donington Park, 2026"></a>
+      <a class="gal-item" href="gallery.html" data-ar="1.5"><img src="./media/gallery/2026-donington-grid.jpg" alt="On the grid at Donington Park, 2026"></a>
+      <a class="gal-item" href="gallery.html" data-ar="1.5"><img src="./media/gallery/2025-snetterton-corner.jpg" alt="No.19 cornering at Snetterton, 2025"></a>
+      <a class="gal-item" href="gallery.html" data-ar="1.5"><img src="./media/gallery/2023-brands-pan.jpg" alt="No.19 at speed, Brands Hatch 2023"></a>
+      <a class="gal-item" href="gallery.html" data-ar="0.75"><img src="./media/gallery/2025-snetterton-battle.jpg" alt="Wheel to wheel at Snetterton, 2025"></a>
+      <a class="gal-item" href="gallery.html" data-ar="1.5"><img src="./media/gallery/2026-donington-chase.jpg" alt="Leading at Donington Park, 2026"></a>
+      <a class="gal-item" href="gallery.html" data-ar="1.5"><img src="./media/gallery/2023-brands-pack.jpg" alt="Leading a pack at Brands Hatch, 2023"></a>
+      <a class="gal-item" href="gallery.html" data-ar="1.0"><img src="./media/gallery/cadwell-2021-action.jpg" alt="On track at Cadwell Park, 2021"></a>
+    </div>
+
+    <div class="gal-cta-row reveal">
+      <a class="gal-btn" href="gallery.html">View full gallery
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 07 RACE REPORTS / coming soon, flips to latest report when data exists -->
+<style>
+  .reports-sec .rep-home{margin-top:6px}
+  .rep-soon{border:1px solid var(--line);border-radius:6px;background:var(--bg2,#0e0e0e);padding:48px 40px;display:flex;flex-direction:column;align-items:flex-start;gap:20px}
+  .rep-soon-badge{display:inline-flex;align-items:center;gap:9px;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#ffb877;background:rgba(232,119,34,.1);border:1px solid rgba(232,119,34,.3);padding:9px 16px;border-radius:3px}
+  .rep-soon-badge::before{content:"";width:7px;height:7px;background:var(--orange);border-radius:50%}
+  .rep-soon-copy{max-width:560px;color:var(--muted);font-size:15px;line-height:1.65}
+  .rep-teaser{display:grid;grid-template-columns:1.3fr 1fr;gap:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--bg2,#0e0e0e)}
+  .rep-teaser .rt-img{background:var(--bg3,#141414);min-height:260px}
+  .rep-teaser .rt-img img{width:100%;height:100%;object-fit:cover;display:block}
+  .rep-teaser .rt-body{padding:36px 34px;display:flex;flex-direction:column;justify-content:center;gap:14px}
+  .rt-meta{font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
+  .rt-ttl{font-family:var(--display);font-weight:800;font-style:italic;letter-spacing:-0.02em;font-size:clamp(26px,3.6vw,40px);line-height:0.98;text-transform:uppercase}
+  .rt-stats{display:flex;gap:22px;margin-top:4px}
+  .rt-stats div{font-family:var(--display)}
+  .rt-stats k{display:block;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--dim);margin-bottom:5px;font-weight:600}
+  .rt-stats v{display:block;font-size:22px;font-weight:800;color:var(--fg)}
+  .rep-cta-row{margin-top:26px}
+  .rep-btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:var(--fg);border:1px solid var(--line2);padding:14px 22px;border-radius:3px;transition:border-color .2s,color .2s}
+  .rep-btn:hover{border-color:var(--orange);color:var(--orange)}
+  .rep-btn svg{width:18px;height:18px;stroke:currentColor;stroke-width:2;fill:none}
+  @media(max-width:760px){.rep-teaser{grid-template-columns:1fr}.rep-teaser .rt-img{min-height:200px}}
+</style>
+<section class="section reports-sec" id="reports">
+  <div class="container">
+    <div class="sec-head reveal">
+      <div>
+        <div class="eyebrow">07 / Race Reports</div>
+        <h2 style="margin-top:18px">From the <span class="orange">cockpit.</span></h2>
+      </div>
+      <div class="right" id="repRight">Coming soon</div>
+    </div>
+
+    <div class="rep-home reveal" id="repHome">
+      <div class="rep-soon">
+        <div class="rep-soon-badge">Coming soon</div>
+        <p class="rep-soon-copy">Race-by-race reports from the season. Qualifying, the races, the numbers, and the story of each weekend. The first report drops after the next round.</p>
+      </div>
+    </div>
+
+    <div class="rep-cta-row reveal" id="repCtaRow" style="display:none">
+      <a class="rep-btn" href="reports.html">All race reports
+        <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- 08 PARTNERS / rotating marquee -->
 <section class="section partners" id="partners">
   <div class="container">
     <div class="sec-head reveal">
       <div>
-        <div class="eyebrow green">06 / Partners</div>
+        <div class="eyebrow green">08 / Partners</div>
         <h2 style="margin-top:18px">In good <span class="orange">company.</span></h2>
       </div>
       <div class="right">Hover to pause</div>
@@ -938,7 +1042,7 @@
   <div class="container">
     <div class="sec-head reveal">
       <div>
-        <div class="eyebrow">07 / Future Vision</div>
+        <div class="eyebrow">09 / Future Vision</div>
         <h2 style="margin-top:18px">The road <span class="orange">ahead.</span></h2>
       </div>
       <div class="right">Formula 1000</div>
@@ -978,7 +1082,7 @@
   <div class="container">
     <div class="sec-head reveal">
       <div>
-        <div class="eyebrow green">08 / Contact</div>
+        <div class="eyebrow green">10 / Contact</div>
         <h2 style="margin-top:18px">Partner <span class="orange">up.</span></h2>
       </div>
       <div class="right">Let&rsquo;s talk</div>
@@ -1040,7 +1144,7 @@
       <div class="ft ft-brand">
         <p>Formula Vee · No.19<br>2026 Season</p>
       </div>
-      <div class="ft"><h5>Site</h5><a href="#">Story</a><a href="#">Partnership</a><a href="#">Calendar</a><a href="#">Media</a><a href="#">Gallery</a></div>
+      <div class="ft"><h5>Site</h5><a href="#">Story</a><a href="#">Partnership</a><a href="#">Calendar</a><a href="#media">Media</a><a href="#gallery">Gallery</a><a href="reports.html">Reports</a></div>
       <div class="ft"><h5>Partners</h5><a href="#">ManaMind</a><a href="#">Ascension VC</a><a href="#">PilotGo</a></div>
       <div class="ft"><h5>Follow</h5><a href="#">Instagram ↗</a><a href="#">TikTok ↗</a><a href="#">YouTube ↗</a></div>
     </div>
@@ -1051,8 +1155,66 @@
   </div>
 </footer>
 
+<script src="./reports-data.js"></script>
 <script>
 (() => {
+  // Race Reports: flip the homepage section from "coming soon" to a teaser
+  // of the latest report when reports-data.js has one. Newest = first in array.
+  (function initReports(){
+    const reports = (window.RACE_REPORTS || []).filter(r => r && (r.date || r.circuit));
+    if (!reports.length) return;
+    const r = reports[0], s = r.stats || {};
+    const esc = (v) => String(v == null ? '' : v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const home = document.getElementById('repHome');
+    const right = document.getElementById('repRight');
+    const ctaRow = document.getElementById('repCtaRow');
+    if (!home) return;
+    const metaBits = [r.circuit, r.series, r.date].filter(Boolean).map(esc).join(' · ');
+    const st = (k, v) => v ? '<div><k>'+esc(k)+'</k><v>'+esc(v)+'</v></div>' : '';
+    const stats = st('Quali', s.quali) + st('Race 1', s.race1) + st('Race 2', s.race2);
+    home.innerHTML =
+      '<a class="rep-teaser" href="reports.html">' +
+        (r.hero ? '<div class="rt-img"><img src="'+esc(r.hero)+'" alt="'+esc(r.circuit||'Latest report')+'"></div>' : '<div class="rt-img"></div>') +
+        '<div class="rt-body">' +
+          '<div class="rt-meta">Latest report</div>' +
+          '<div class="rt-ttl">'+esc(r.circuit||'Race report')+'</div>' +
+          (metaBits ? '<div class="rt-meta">'+metaBits+'</div>' : '') +
+          (stats ? '<div class="rt-stats">'+stats+'</div>' : '') +
+        '</div>' +
+      '</a>';
+    if (right) right.textContent = reports.length + (reports.length === 1 ? ' report' : ' reports');
+    if (ctaRow) ctaRow.style.display = '';
+  })();
+
+  // Gallery preview: justified rows (every row full width, shared height)
+  function galTarget(){ const w=innerWidth; return w<=640?170:w<=1100?220:270; }
+  function layoutPreview(){
+    const grid = document.querySelector('.gal-preview'); if(!grid) return;
+    const gap = innerWidth<=640 ? 8 : 12;
+    const cw = grid.clientWidth; if(!cw) return;
+    const T = galTarget();
+    const tiles = [...grid.children].filter(t => t.dataset.ar);
+    const n = tiles.length; let i = 0;
+    while(i < n){
+      let sumAR = 0, k = i, rh = Infinity;
+      while(k < n){ sumAR += parseFloat(tiles[k].dataset.ar); rh = (cw - gap*(k-i))/sumAR; k++; if(rh <= T) break; }
+      const count = k - i, lastRow = (k >= n);
+      let h = (cw - gap*(count-1)) / sumAR;
+      if(lastRow && h > T) h = T;
+      h = Math.round(h);
+      let used = 0;
+      for(let x = i; x < k; x++){
+        const a = parseFloat(tiles[x].dataset.ar), w = Math.floor(h*a);
+        tiles[x].style.flex='none'; tiles[x].style.height=h+'px'; tiles[x].style.width=w+'px'; used += w;
+      }
+      if(!lastRow){ const lt = tiles[k-1]; lt.style.width = (parseInt(lt.style.width) + (cw - used - gap*(count-1))) + 'px'; }
+      i = k;
+    }
+  }
+  layoutPreview();
+  addEventListener('load', layoutPreview);
+  let _gt; addEventListener('resize', () => { clearTimeout(_gt); _gt = setTimeout(layoutPreview, 120); });
+
   // Story timeline: arrow-driven horizontal scroll. Native scroll only,
   // no wheel hijack, no sticky pin, no drag state. Runs regardless of motion pref.
   const tlVp = document.getElementById('tlViewport');
@@ -1123,6 +1285,21 @@
   }, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
 
   reveals.forEach((el) => io.observe(el));
+
+// Grey out calendar rounds whose race weekend has passed
+  const today = new Date(); today.setHours(0,0,0,0);
+  document.querySelectorAll('.cal-row[data-end]').forEach((row) => {
+    const end = new Date(row.getAttribute('data-end') + 'T23:59:59');
+    if (end < today) {
+      row.classList.add('past');
+      if (!row.querySelector('.cal-done')) {
+        const pill = document.createElement('div');
+        pill.className = 'cal-done';
+        pill.textContent = 'Completed';
+        row.appendChild(pill);
+      }
+    }
+  });
 
 // Smooth scroll on nav anchors
   document.querySelectorAll('a[href^="#"]').forEach((a) => {

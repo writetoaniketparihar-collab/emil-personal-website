@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gallery · EK19 · Emil Kostadinov</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0a;--bg2:#0e0e0e;--bg3:#141414;--card:#111111;
+    --line:#1f1f1f;--line2:#2c2c2c;
+    --fg:#f5f5f0;--muted:#999;--dim:#5a5a5a;
+    --green:#006a5e;--green2:#00a08a;
+    --orange:#e87722;--orange2:#ff8c33;
+    --display:'Archivo',-apple-system,sans-serif;
+    --sans:'Inter',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .container{max-width:1500px;margin:0 auto;padding:0 40px}
+  @media(max-width:640px){.container{padding:0 20px}}
+
+  /* Top bar */
+  .gnav{position:sticky;top:0;z-index:50;background:linear-gradient(180deg,rgba(10,10,10,.96) 60%,rgba(10,10,10,0));padding:20px 0;backdrop-filter:blur(6px)}
+  .gnav-inner{display:flex;align-items:center;justify-content:space-between;gap:24px}
+  .gnav img{height:30px;width:auto}
+  .gback{display:inline-flex;align-items:center;gap:9px;font-family:var(--display);font-weight:600;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+  .gback:hover{color:var(--orange)}
+  .gback svg{width:14px;height:14px;stroke:currentColor;stroke-width:2.2;fill:none}
+
+  /* Header */
+  .ghead{padding:70px 0 40px}
+  .ghead .eyebrow{font-family:var(--sans);font-weight:600;font-size:12px;letter-spacing:0.25em;text-transform:uppercase;color:var(--orange);display:inline-flex;align-items:center;gap:10px}
+  .ghead .eyebrow::before{content:"";width:24px;height:1px;background:var(--orange)}
+  .ghead h1{font-family:var(--display);font-weight:800;letter-spacing:-0.03em;font-size:clamp(38px,6vw,78px);line-height:0.98;margin-top:22px}
+  .ghead h1 span{color:var(--orange)}
+  .gsub{margin-top:20px;max-width:560px;color:var(--muted);font-size:15px;line-height:1.6}
+  .gbanner{margin-top:28px;display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:600;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#ffb877;background:rgba(232,119,34,.1);border:1px solid rgba(232,119,34,.3);padding:9px 16px;border-radius:3px}
+  .gbanner::before{content:"";width:7px;height:7px;background:var(--orange);border-radius:50%;flex:none}
+
+  /* Layout: main + sticky year rail */
+  .glayout{display:grid;grid-template-columns:1fr 88px;gap:0;padding-bottom:120px}
+  @media(max-width:900px){.glayout{grid-template-columns:1fr}}
+
+  /* Event block */
+  .gal-event{padding:56px 0 10px;border-top:1px solid var(--line)}
+  .gal-event:first-child{border-top:none}
+  .gal-head{display:flex;flex-direction:column;gap:12px;margin-bottom:30px}
+  .gal-ttl{font-family:var(--display);font-weight:800;font-style:italic;letter-spacing:-0.03em;font-size:clamp(30px,4.6vw,58px);line-height:0.95;color:rgba(245,245,240,.14);text-transform:uppercase}
+  .gal-meta{display:flex;align-items:center;gap:14px;font-family:var(--display);font-weight:600;font-size:13px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
+  .gal-meta .flag{width:26px;height:16px;border-radius:2px;overflow:hidden;flex:none;box-shadow:0 0 0 1px rgba(255,255,255,.08)}
+  .gal-meta .flag svg{width:100%;height:100%;display:block}
+  .gal-meta .dot{width:4px;height:4px;border-radius:50%;background:var(--green2)}
+
+  /* Justified rows grid (JS-sized) */
+  .gal-grid{display:flex;flex-wrap:wrap;gap:12px}
+  @media(max-width:640px){.gal-grid{gap:8px}}
+  .gtile{position:relative;overflow:hidden;border-radius:8px;border:1px solid var(--line2);background:linear-gradient(135deg,#191919,#0c0c0c);flex:1 1 240px;height:240px}
+  .gtile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+  .gtile:hover img{transform:scale(1.05)}
+  .gtile::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.4),transparent 55%);opacity:0;transition:opacity .3s}
+  .gtile:hover::after{opacity:1}
+
+  /* Sticky year rail */
+  .grail{position:relative}
+  @media(max-width:900px){.grail{display:none}}
+  .grail-inner{position:sticky;top:120px;height:calc(100vh - 200px);display:flex;flex-direction:column;align-items:center;padding-left:34px}
+  .grail-bar{position:absolute;left:34px;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--green) 0%,var(--orange) 100%);border-radius:2px;opacity:.5}
+  .gyear{position:relative;font-family:var(--display);font-weight:800;font-size:14px;letter-spacing:0.06em;color:var(--dim);padding:14px 0 14px 22px;transition:color .3s}
+  .gyear::before{content:"";position:absolute;left:-8px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:var(--dim);transition:background .3s,transform .3s}
+  .gyear.active{color:var(--orange)}
+  .gyear.active::before{background:var(--orange);transform:translateY(-50%) scale(1.4)}
+
+  .gfoot{border-top:1px solid var(--line);padding:40px 0 60px;text-align:center;color:var(--dim);font-size:12px;letter-spacing:0.04em}
+</style>
+</head>
+<body>
+
+<header class="gnav">
+  <div class="container gnav-inner">
+    <a href="index.html" class="logo"><img src="./logo.png" alt="EK19"></a>
+    <a class="gback" href="index.html">
+      <svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to site
+    </a>
+  </div>
+</header>
+
+<div class="container">
+  <div class="ghead">
+    <div class="eyebrow">Gallery</div>
+    <h1>All the photos of<br><span>Emil Kostadinov.</span></h1>
+    <p class="gsub">A season on track, round by round. Selected shots from the Formula Vee campaign and beyond.</p>
+    <div class="gbanner">Selected shots &middot; 2021&ndash;2026</div>
+  </div>
+
+  <div class="glayout">
+    <div class="gmain">
+
+      <section class="gal-event" data-year="2026">
+        <div class="gal-head">
+          <h2 class="gal-ttl">Donington Park</h2>
+          <div class="gal-meta">
+            <span class="flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></span>
+            <span class="dot"></span> April 2026
+          </div>
+        </div>
+        <div class="gal-grid">
+          <div class="gtile" data-ar="1.5"><img src="./media/gallery/2026-donington-lead.jpg" alt="No.19 leads the pack into a corner"></div>
+          <div class="gtile" data-ar="1.5"><img src="./media/gallery/2026-donington-grid.jpg" alt="On the grid, low angle"></div>
+          <div class="gtile" data-ar="1.5"><img src="./media/gallery/2026-donington-chase.jpg" alt="Leading down the straight at Donington"></div>
+          <div class="gtile" data-ar="1.5"><img src="./media/gallery/2026-donington-damp.jpg" alt="Three cars on a damp track"></div>
+          <div class="gtile" data-ar="1.5"><img src="./media/gallery/2026-donington-pit.jpg" alt="Cars pushed down the pit lane"></div>
+          <div class="gtile" data-ar="0.75"><img src="./media/gallery/2026-donington-paddock.jpg" alt="The No.19 in the paddock"></div>
+        </div>
+      </section>
+
+      <section class="gal-event" data-year="2025">
+        <div class="gal-head">
+          <h2 class="gal-ttl">Snetterton</h2>
+          <div class="gal-meta">
+            <span class="flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></span>
+            <span class="dot"></span> 2025
+          </div>
+        </div>
+        <div class="gal-grid">
+          <div class="gtile" data-ar="1.5"><img src="./media/gallery/2025-snetterton-corner.jpg" alt="No.19 cornering hard"></div>
+          <div class="gtile" data-ar="0.75"><img src="./media/gallery/2025-snetterton-battle.jpg" alt="Leading through the corner"></div>
+          <div class="gtile" data-ar="1.5"><img src="./media/gallery/2025-snetterton-spray.jpg" alt="Wet-track battle in the spray"></div>
+          <div class="gtile" data-ar="1.5"><img src="./media/gallery/2025-snetterton-duel.jpg" alt="Wheel to wheel"></div>
+          <div class="gtile" data-ar="1.4952"><img src="./media/gallery/2025-snetterton-static.jpg" alt="The No.19 in the paddock"></div>
+        </div>
+      </section>
+
+      <section class="gal-event" data-year="2023">
+        <div class="gal-head">
+          <h2 class="gal-ttl">Brands Hatch</h2>
+          <div class="gal-meta">
+            <span class="flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></span>
+            <span class="dot"></span> 2023
+          </div>
+        </div>
+        <div class="gal-grid">
+          <div class="gtile" data-ar="1.5"><img src="./media/gallery/2023-brands-pan.jpg" alt="No.19 at speed, panning shot"></div>
+          <div class="gtile" data-ar="1.5"><img src="./media/gallery/2023-brands-pack.jpg" alt="Leading a pack through the corner"></div>
+        </div>
+      </section>
+
+      <section class="gal-event" data-year="2023">
+        <div class="gal-head">
+          <h2 class="gal-ttl">Donington Park</h2>
+          <div class="gal-meta">
+            <span class="flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></span>
+            <span class="dot"></span> 2023
+          </div>
+        </div>
+        <div class="gal-grid">
+          <div class="gtile" data-ar="0.75"><img src="./media/gallery/2023-donington-cockpit.jpg" alt="In the cockpit, helmet on"></div>
+          <div class="gtile" data-ar="0.75"><img src="./media/gallery/2023-donington-static.jpg" alt="The No.19 in the pit lane"></div>
+          <div class="gtile" data-ar="0.75"><img src="./media/gallery/2023-donington-rainbow.jpg" alt="On the grid under a rainbow"></div>
+        </div>
+      </section>
+
+      <section class="gal-event" data-year="2022">
+        <div class="gal-head">
+          <h2 class="gal-ttl">Donington Park</h2>
+          <div class="gal-meta">
+            <span class="flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></span>
+            <span class="dot"></span> 2022
+          </div>
+        </div>
+        <div class="gal-grid">
+          <div class="gtile" data-ar="1.5021"><img src="./media/gallery/2022-donington-pack.jpg" alt="No.19 leads a pack at Donington"></div>
+          <div class="gtile" data-ar="1.5021"><img src="./media/gallery/2022-donington-corner.jpg" alt="Cornering at Donington"></div>
+          <div class="gtile" data-ar="1.5"><img src="./media/gallery/2022-donington-pan.jpg" alt="On track, panning shot"></div>
+          <div class="gtile" data-ar="0.75"><img src="./media/gallery/2022-donington-paddock.jpg" alt="The No.19 in the paddock"></div>
+        </div>
+      </section>
+
+      <section class="gal-event" data-year="2021">
+        <div class="gal-head">
+          <h2 class="gal-ttl">Cadwell Park</h2>
+          <div class="gal-meta">
+            <span class="flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></span>
+            <span class="dot"></span> 2021
+          </div>
+        </div>
+        <div class="gal-grid">
+          <div class="gtile" data-ar="1.0"><img src="./media/gallery/cadwell-2021-action.jpg" alt="No.19 on track at Cadwell Park"></div>
+          <div class="gtile" data-ar="0.75"><img src="./media/gallery/cadwell-2021-visor.jpg" alt="In the car, visor up"></div>
+          <div class="gtile" data-ar="0.75"><img src="./media/gallery/cadwell-2021-solo.jpg" alt="The No.19 on the tarmac"></div>
+          <div class="gtile" data-ar="1.3333"><img src="./media/gallery/cadwell-2021-pair.jpg" alt="Cars in the paddock"></div>
+          <div class="gtile" data-ar="0.75"><img src="./media/gallery/cadwell-2021-mirror.jpg" alt="Cockpit and mirror detail"></div>
+          <div class="gtile" data-ar="0.75"><img src="./media/gallery/cadwell-2021-grid.jpg" alt="Formula Vee grid"></div>
+        </div>
+      </section>
+
+      <section class="gal-event" data-year="2021">
+        <div class="gal-head">
+          <h2 class="gal-ttl">Oulton Park</h2>
+          <div class="gal-meta">
+            <span class="flag"><svg viewBox="0 0 60 30" preserveAspectRatio="none"><rect width="60" height="30" fill="#012169"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L60 30 M60 0 L0 30" stroke="#C8102E" stroke-width="2.5"/><path d="M30 0 V30 M0 15 H60" stroke="#fff" stroke-width="10"/><path d="M30 0 V30 M0 15 H60" stroke="#C8102E" stroke-width="6"/></svg></span>
+            <span class="dot"></span> 2021
+          </div>
+        </div>
+        <div class="gal-grid">
+          <div class="gtile" data-ar="0.75"><img src="./media/gallery/oulton-2021-car.jpg" alt="Emil seated in the No.19"></div>
+          <div class="gtile" data-ar="0.7721"><img src="./media/gallery/oulton-2021-bw.jpg" alt="Emil in racing helmet"></div>
+        </div>
+      </section>
+
+    </div>
+
+    <aside class="grail">
+      <div class="grail-inner">
+        <div class="grail-bar"></div>
+        <div class="gyear" data-year="2026">2026</div>
+        <div class="gyear" data-year="2025">2025</div>
+        <div class="gyear" data-year="2023">2023</div>
+        <div class="gyear" data-year="2022">2022</div>
+        <div class="gyear" data-year="2021">2021</div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<div class="gfoot">EK19 · Emil Kostadinov · Formula Vee No.19</div>
+
+<script>
+(function(){
+  // Justified-rows layout: every row is full width, all tiles in a row share one height
+  function target(){ const w=innerWidth; return w<=640?170:w<=1000?220:280; }
+  function layoutGrid(grid){
+    const gap = innerWidth<=640 ? 8 : 12;
+    const cw = grid.clientWidth; if(!cw) return;
+    const T = target();
+    const tiles = [...grid.children].filter(t => t.dataset.ar);
+    const n = tiles.length; let i = 0;
+    while(i < n){
+      let sumAR = 0, k = i, rh = Infinity;
+      while(k < n){
+        sumAR += parseFloat(tiles[k].dataset.ar);
+        rh = (cw - gap*(k-i)) / sumAR;
+        k++;
+        if(rh <= T) break;
+      }
+      const count = k - i;
+      const lastRow = (k >= n);
+      let h = (cw - gap*(count-1)) / sumAR;
+      if(lastRow && h > T) h = T;          // don't blow up a short final row
+      h = Math.round(h);
+      let used = 0;
+      for(let x = i; x < k; x++){
+        const a = parseFloat(tiles[x].dataset.ar);
+        const w = Math.floor(h * a);
+        tiles[x].style.flex = 'none';
+        tiles[x].style.height = h + 'px';
+        tiles[x].style.width = w + 'px';
+        used += w;
+      }
+      if(!lastRow){                          // absorb rounding into last tile so the row edge is flush
+        const diff = cw - used - gap*(count-1);
+        const lt = tiles[k-1];
+        lt.style.width = (parseInt(lt.style.width) + diff) + 'px';
+      }
+      i = k;
+    }
+  }
+  function layoutAll(){ document.querySelectorAll('.gal-grid').forEach(layoutGrid); }
+  layoutAll();
+  addEventListener('load', layoutAll);
+  let t; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(layoutAll, 120); });
+
+  // Highlight the active year in the rail based on which event is in view
+  const events = document.querySelectorAll('.gal-event');
+  const years = document.querySelectorAll('.gyear');
+  function setYear(y){
+    years.forEach(el => el.classList.toggle('active', el.getAttribute('data-year') === y));
+  }
+  setYear('2026');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) setYear(e.target.getAttribute('data-year')); });
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  events.forEach(ev => io.observe(ev));
+})();
+</script>
+
+</body>
+</html>

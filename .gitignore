@@ -1,6 +1,7 @@
 .vercel
 .DS_Store
 node_modules
+_drive_pull
 *.log
 .env
 .env.local
