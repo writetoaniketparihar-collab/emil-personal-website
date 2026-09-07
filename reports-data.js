@@ -20,7 +20,42 @@
 
 window.RACE_REPORTS = [
 
-  /* ---------- EXAMPLE (copy this, uncomment, and edit) ----------
+  /* ============================================================
+     SAMPLE ENTRY — DEMO ONLY
+     ------------------------------------------------------------
+     This is a filled-in example so you can see what a finished
+     report looks like. The words, positions and lap times below
+     are placeholders, NOT real results. Emil: replace every value
+     with your own after the round, then it's a real report.
+     To start fresh, just delete this whole { ... } block.
+     ============================================================ */
+  {
+    date: "6 Apr 2026",
+    circuit: "Donington Park National",
+    series: "750MC Formula Vee",
+    car: "No.19",
+
+    hero: "media/gallery/2026-donington-grid.jpg",
+    heroCaption: "SAMPLE REPORT. Replace the text and photos with your own. Donington Park, April 2026.",
+
+    stats: {
+      quali: "P4",
+      race1: "P3",
+      race2: "P2",
+      bestLap: "1:12.4",
+      laps: "24"
+    },
+
+    qualifying: "Cool, dry conditions to open the season. The car came alive on the second set of laps once temperature was in the tyres, and P4 on the grid put us right in the fight. Half a tenth off the second row, plenty to work with heading into the races.",
+
+    race1: "A clean launch held the line into Redgate and we settled into a three-car train for the lead group. Spent the middle stint learning where the leaders were quick, then made the move stick at the Melbourne hairpin with four to go. P3 and the podium to open the year.",
+    race1Photo: "media/gallery/2026-donington-lead.jpg",
+
+    race2: "Reverse-grid draw put us fifth on the road. Worked forward early, picked off two cars through the Craner Curves, and closed onto the back of the leader in the closing laps. Ran out of time to make it stick but P2 caps a strong opening weekend.",
+    race2Photo: "media/gallery/2026-donington-chase.jpg"
+  },
+
+  /* ---------- BLANK TEMPLATE (copy this, uncomment, and edit) ----------
   {
     date: "6 Apr 2026",                       // race weekend date
     circuit: "Donington Park",                // track name

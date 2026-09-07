@@ -18,7 +18,7 @@
     --sans:'Inter',sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  html,body{background:var(--bg);color:var(--fg);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:clip}
   a{color:inherit;text-decoration:none}
   .container{max-width:1500px;margin:0 auto;padding:0 40px}
   @media(max-width:640px){.container{padding:0 20px}}
@@ -46,7 +46,7 @@
   @media(max-width:900px){.glayout{grid-template-columns:1fr}}
 
   /* Event block */
-  .gal-event{padding:56px 0 10px;border-top:1px solid var(--line)}
+  .gal-event{padding:56px 0 10px;border-top:1px solid var(--line);scroll-margin-top:90px}
   .gal-event:first-child{border-top:none}
   .gal-head{display:flex;flex-direction:column;gap:12px;margin-bottom:30px}
   .gal-ttl{font-family:var(--display);font-weight:800;font-style:italic;letter-spacing:-0.03em;font-size:clamp(30px,4.6vw,58px);line-height:0.95;color:rgba(245,245,240,.14);text-transform:uppercase}
@@ -64,15 +64,26 @@
   .gtile::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.4),transparent 55%);opacity:0;transition:opacity .3s}
   .gtile:hover::after{opacity:1}
 
-  /* Sticky year rail */
+  /* Year rail: a scroll scrubber. Each year sits at the height of its photos,
+     the knob travels down as you scroll, click a year to jump. JS positions everything. */
   .grail{position:relative}
   @media(max-width:900px){.grail{display:none}}
-  .grail-inner{position:sticky;top:120px;height:calc(100vh - 200px);display:flex;flex-direction:column;align-items:center;padding-left:34px}
-  .grail-bar{position:absolute;left:34px;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--green) 0%,var(--orange) 100%);border-radius:2px;opacity:.5}
-  .gyear{position:relative;font-family:var(--display);font-weight:800;font-size:14px;letter-spacing:0.06em;color:var(--dim);padding:14px 0 14px 22px;transition:color .3s}
-  .gyear::before{content:"";position:absolute;left:-8px;top:50%;transform:translateY(-50%);width:9px;height:9px;border-radius:50%;background:var(--dim);transition:background .3s,transform .3s}
-  .gyear.active{color:var(--orange)}
-  .gyear.active::before{background:var(--orange);transform:translateY(-50%) scale(1.4)}
+  .grail-inner{position:sticky;top:130px;height:calc(100vh - 220px)}
+  /* the vertical line */
+  .grail-track{position:absolute;left:34px;top:0;bottom:0;width:2px;background:var(--line2);border-radius:2px}
+  /* filled portion showing how far you've scrolled */
+  .grail-fill{position:absolute;left:34px;top:0;height:0;width:2px;background:linear-gradient(180deg,var(--green) 0%,var(--orange) 100%);border-radius:2px;z-index:2}
+  /* the travelling position knob */
+  .grail-knob{position:absolute;left:35px;top:0;width:12px;height:12px;border-radius:50%;background:var(--orange);transform:translate(-50%,-50%);box-shadow:0 0 0 4px rgba(232,119,34,.18);z-index:4}
+  /* year markers, positioned by JS to line up with their photos */
+  .gyear{position:absolute;left:0;top:0;transform:translateY(-50%);display:flex;align-items:center;height:22px;background:none;border:none;cursor:pointer;padding:0;z-index:3}
+  .gyear-dot{position:absolute;left:35px;top:50%;width:9px;height:9px;border-radius:50%;background:var(--dim);transform:translate(-50%,-50%);transition:background .3s,transform .3s}
+  .gyear-label{margin-left:52px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:0.06em;color:var(--dim);white-space:nowrap;transition:color .3s}
+  .gyear:hover .gyear-label{color:var(--fg)}
+  .gyear:hover .gyear-dot{background:var(--green2)}
+  .gyear:focus-visible{outline:2px solid var(--orange);outline-offset:3px;border-radius:3px}
+  .gyear.active .gyear-label{color:var(--orange)}
+  .gyear.active .gyear-dot{background:var(--orange);transform:translate(-50%,-50%) scale(1.4)}
 
   .gfoot{border-top:1px solid var(--line);padding:40px 0 60px;text-align:center;color:var(--dim);font-size:12px;letter-spacing:0.04em}
 </style>
@@ -215,13 +226,15 @@
     </div>
 
     <aside class="grail">
-      <div class="grail-inner">
-        <div class="grail-bar"></div>
-        <div class="gyear" data-year="2026">2026</div>
-        <div class="gyear" data-year="2025">2025</div>
-        <div class="gyear" data-year="2023">2023</div>
-        <div class="gyear" data-year="2022">2022</div>
-        <div class="gyear" data-year="2021">2021</div>
+      <div class="grail-inner" id="grailInner">
+        <div class="grail-track"></div>
+        <div class="grail-fill" id="grailFill"></div>
+        <button type="button" class="gyear" data-year="2026" aria-label="Jump to 2026 photos"><span class="gyear-dot"></span><span class="gyear-label">2026</span></button>
+        <button type="button" class="gyear" data-year="2025" aria-label="Jump to 2025 photos"><span class="gyear-dot"></span><span class="gyear-label">2025</span></button>
+        <button type="button" class="gyear" data-year="2023" aria-label="Jump to 2023 photos"><span class="gyear-dot"></span><span class="gyear-label">2023</span></button>
+        <button type="button" class="gyear" data-year="2022" aria-label="Jump to 2022 photos"><span class="gyear-dot"></span><span class="gyear-label">2022</span></button>
+        <button type="button" class="gyear" data-year="2021" aria-label="Jump to 2021 photos"><span class="gyear-dot"></span><span class="gyear-label">2021</span></button>
+        <div class="grail-knob" id="grailKnob"></div>
       </div>
     </aside>
   </div>
@@ -269,22 +282,67 @@
       i = k;
     }
   }
-  function layoutAll(){ document.querySelectorAll('.gal-grid').forEach(layoutGrid); }
+  function layoutAll(){ document.querySelectorAll('.gal-grid').forEach(layoutGrid); positionRail(); }
+
+  // ---- Year rail as a scroll scrubber ----------------------------------
+  // Each year marker is placed at the scroll position where its photos begin,
+  // the knob + fill track the current scroll position, and clicking jumps there.
+  const events = [...document.querySelectorAll('.gal-event')];
+  const years = [...document.querySelectorAll('.gyear')];
+  const grailInner = document.getElementById('grailInner');
+  const fill = document.getElementById('grailFill');
+  const knob = document.getElementById('grailKnob');
+  const NAV = 90;
+
+  // scroll position at which a given year's first event reaches the top
+  function scrollForYear(yr){
+    const ev = events.find(e => e.getAttribute('data-year') === yr);
+    if (!ev) return 0;
+    return ev.getBoundingClientRect().top + scrollY - NAV;
+  }
+  function scrollRange(){
+    return Math.max(1, document.documentElement.scrollHeight - innerHeight);
+  }
+
+  // place each year marker at its proportional height on the rail
+  function positionRail(){
+    if (!grailInner) return;
+    const H = grailInner.clientHeight, S = scrollRange();
+    years.forEach(btn => {
+      const pct = Math.min(1, Math.max(0, scrollForYear(btn.getAttribute('data-year')) / S));
+      btn.style.top = (pct * H) + 'px';
+    });
+    updateRail();
+  }
+
+  // move the knob/fill and light up the year you're currently in
+  function updateRail(){
+    if (!grailInner) return;
+    const H = grailInner.clientHeight, S = scrollRange();
+    const y = Math.min(1, Math.max(0, scrollY / S)) * H;
+    fill.style.height = y + 'px';
+    knob.style.top = y + 'px';
+    let active = years[0];
+    years.forEach(btn => {
+      if (scrollForYear(btn.getAttribute('data-year')) <= scrollY + NAV + 4) active = btn;
+    });
+    years.forEach(b => b.classList.toggle('active', b === active));
+  }
+
+  years.forEach(btn => btn.addEventListener('click', () => {
+    scrollTo({ top: scrollForYear(btn.getAttribute('data-year')), behavior: 'smooth' });
+  }));
+
+  let ticking = false;
+  addEventListener('scroll', () => {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => { updateRail(); ticking = false; });
+  }, { passive: true });
+
   layoutAll();
   addEventListener('load', layoutAll);
   let t; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(layoutAll, 120); });
-
-  // Highlight the active year in the rail based on which event is in view
-  const events = document.querySelectorAll('.gal-event');
-  const years = document.querySelectorAll('.gyear');
-  function setYear(y){
-    years.forEach(el => el.classList.toggle('active', el.getAttribute('data-year') === y));
-  }
-  setYear('2026');
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) setYear(e.target.getAttribute('data-year')); });
-  }, { rootMargin: '-45% 0px -45% 0px' });
-  events.forEach(ev => io.observe(ev));
 })();
 </script>
 
